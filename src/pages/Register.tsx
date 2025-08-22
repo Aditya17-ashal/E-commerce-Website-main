@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { config } from "../lib/config";
 
 const Register: React.FC = () => {
   const [firstName, setFirstName] = useState("");
@@ -14,7 +15,7 @@ const Register: React.FC = () => {
     setSuccess("");
 
     try {
-      const response = await fetch("http://localhost:8082/api/auth/register", {
+      const response = await fetch(`${config.apiBaseUrl}/api/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

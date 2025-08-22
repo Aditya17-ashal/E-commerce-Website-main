@@ -1,4 +1,7 @@
-const API_BASE_URL = 'http://localhost:8082'; // Updated to port 8082
+import { config } from './config';
+
+// Use centralized configuration for API base URL
+const API_BASE_URL = config.apiBaseUrl;
 
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
     const headers: Record<string, string> = {
@@ -8,13 +11,15 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
     const token = localStorage.getItem('token');
     if (token) {
         headers['Authorization'] = `Bearer ${token}`;
-        // Debug: Log the request details
-        console.log('API Request:', {
-            url: `${API_BASE_URL}${path}`,
-            method: options.method || 'GET',
-            hasToken: !!token,
-            tokenStart: token.substring(0, 20) + '...'
-        });
+        // Debug: Log the request details in development
+        if (config.enableDebugLogs) {
+            console.log('API Request:', {
+                url: `${API_BASE_URL}${path}`,
+                method: options.method || 'GET',
+                hasToken: !!token,
+                tokenStart: token.substring(0, 20) + '...'
+            });
+        }
     }
 
     const response = await fetch(`${API_BASE_URL}${path}`, {
